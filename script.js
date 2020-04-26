@@ -22,7 +22,9 @@ const game = {
   scoreDisplay: null,
   levelDisplay: null,
   timerInterval: null,
-  startButton: null
+  startButton: null,
+  gameBoard: null,
+  gameOver: true,
   // and much more
 };
 
@@ -33,6 +35,13 @@ setGame();
 /******************************************/
 function setGame() {
   // register any element in your game object
+  game.levelDisplay = document.querySelector('.game-stats__level--value');
+  game.scoreDisplay = document.querySelector('.game-stats__score--value');
+  game.startButton = document.querySelector('.game-stats__button');
+  game.timerDisplay = document.querySelector('.game-timer__bar');
+  game.gameBoard = document.querySelector('.game-board');
+
+  bindStartButton();
 }
 
 function startGame() {}
@@ -53,7 +62,10 @@ function updateTimerDisplay() {}
 /*******************************************
 /     bindings
 /******************************************/
-function bindStartButton() {}
+function bindStartButton() {
+  game.startButton.addEventListener
+
+}
 
 function unBindCardClick(card) {}
 
