@@ -67,6 +67,7 @@ function startGame() {
 }
 
 function handleCardFlip() {
+
 }
 
 function nextLevel() {
@@ -82,19 +83,16 @@ function nextLevel() {
     generateCards();
     bindCardClick();
     startTimer();
-
+    
   }
 }
 
 function handleGameOver() {
-  game.startButton.innerHTML = 'Start game';
-  clearInterval(game.timerInterval);
-  game.gameOver = true;
-  alert(`congratulation, your score is ${game.score}`)
+  game.startButton.innerHTML = 'start game'
 }
 function generateCards(){
 
-}function createCardElement(tech) {}
+}
 
 function startTimer() {
   if (game.timerInterval){
@@ -117,9 +115,7 @@ function stopTimer(){
   clearInterval(game.timerInterval);
   game.timerInterval = null;
 }
-function checkCardMatching(card1, card2){
-  
-}
+
 /*******************************************
 /     UI update
 /******************************************/
@@ -152,14 +148,7 @@ function bindStartButton() {
   });
 }
 
-function unBindCardClick(card) {
-  card.removeEventListener('click', handleCardFlip);
-}
+function unBindCardClick(card) {}
 
-function bindCardClick() {
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    card.addEventListener('click', handleCardFlip)
-  });
-}
+function bindCardClick() {}
 

@@ -67,6 +67,7 @@ function startGame() {
 }
 
 function handleCardFlip() {
+
 }
 
 function nextLevel() {
@@ -117,9 +118,7 @@ function stopTimer(){
   clearInterval(game.timerInterval);
   game.timerInterval = null;
 }
-function checkCardMatching(card1, card2){
-  
-}
+
 /*******************************************
 /     UI update
 /******************************************/
@@ -158,7 +157,7 @@ function unBindCardClick(card) {
 
 function bindCardClick() {
   const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
+  cards.forEach(card  => {
     card.addEventListener('click', handleCardFlip)
   });
 }
