@@ -75,8 +75,7 @@ function generateCards() {
   for (let i = 0; i < totalCards / 2; i++) {
     const tech = CARD_TECHS[i % CARD_TECHS.length];
     const card = createCardElement(tech);
-    cards.push(card);
-    cards.unshift(card.cloneNode(true));
+    cards.push(cards.push(card));
   }
   while (cards.length > 0) {
     const index = Math.floor(Math.random() * cards.length);
@@ -104,7 +103,9 @@ function handleCardFlip() {
   if (game.checkMatching || game.gameOver) {
     return;
   }
+  // understand why this === card element, you can also pass a card element param in
   const currentSelected = this;
+  // check if same card
   if (currentSelected === game.preSelected) {
     currentSelected.classList.remove('card--flipped');
     game.preSelected = null;
@@ -112,7 +113,9 @@ function handleCardFlip() {
   }else{
     currentSelected.classList.add('card--flipped');
   }
+  // check if preselected already
   if (game.preSelected) {
+    // check match
     console.log(currentSelected.dataset.tech, game.preSelected.dataset.tech);
     checkCardMatching(currentSelected, game.preSelected);
     return;

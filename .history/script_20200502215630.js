@@ -104,7 +104,9 @@ function handleCardFlip() {
   if (game.checkMatching || game.gameOver) {
     return;
   }
+  // understand why this === card element, you can also pass a card element param in
   const currentSelected = this;
+  // check if same card
   if (currentSelected === game.preSelected) {
     currentSelected.classList.remove('card--flipped');
     game.preSelected = null;
@@ -112,34 +114,14 @@ function handleCardFlip() {
   }else{
     currentSelected.classList.add('card--flipped');
   }
+  // check if preselected already
   if (game.preSelected) {
+    // check match
     console.log(currentSelected.dataset.tech, game.preSelected.dataset.tech);
     checkCardMatching(currentSelected, game.preSelected);
     return;
   }
   game.preSelected = currentSelected;
-}
-
-function checkCardMatching(card1, card2){
-  if (card1.dataset.tech === card2.dataset.tech) {
-    unBindCardClick(card1);
-    unBindCardClick(card2);
-    game.preSelected = null;
-    game.clearedCards += 2;
-    updateScore();
-    if (game.clearedCards === game.totalCards) {
-      stopTimer();
-      setTimeout(() => nextLevel(), 1500);
-    }
-  } else {
-    game.checkMatching = true;
-    setTimeout(() => {
-      card1.classList.remove('card--flipped');
-      card2.classList.remove('card--flipped');
-      game.preSelected = null;
-      game.checkMatching = false;
-    }, 1000);
-  }
 }
 
 function nextLevel() {
@@ -187,11 +169,31 @@ function stopTimer(){
   clearInterval(game.timerInterval);
   game.timerInterval = null;
 }
+function checkCardMatching(card1, card2){
+  if (card1.dataset.tech === card2.dataset.tech) {
+    unBindCardClick(card1);
+    unBindCardClick(card2);
+    game.preSelected = null;
+    game.clearedCards += 2;
+    updateScore();
 
+    if (game.clearedCards === game.totalCards) {
+      stopTimer();
+      setTimeout(() => nextLevel(), 1500);
+    }
+  } else {
+    game.checkMatching = true;
+    setTimeout(() => {
+      card1.classList.remove('card--flipped');
+      card2.classList.remove('card--flipped');
+      game.preSelected = null;
+      game.checkMatching = false;
+    }, 1000);
+  }
+}
 /*******************************************
 /     UI update
 /******************************************/
-
 function updateScore() {
   const score = game.level * game.level * game.timer;
   game.score += score;
@@ -205,10 +207,22 @@ function updateTimerDisplay() {
 }
 
 function clearGameBoard() {
-  while (game.gameBoard.firstChild) {
-    game.gameBoard.firstChild.removeEventListener('click', handleCardFlip);
-    game.gameBoard.removeChild(game.gameBoard.firstChild);
+  const { gameBoard } = game;
+  while (gameBoard.firstChild) {
+    gameBoard.firstChild.removeEventListener('click', handleCardFlip);
+    gameBoard.removeChild(gameBoard.firstChild);
   }
+}
+
+function unBindCardClick(card) {
+  card.removeEventListener('click', handleCardFlip);
+}
+
+function bindCardClick() {
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    card.addEventListener('click', handleCardFlip);
+  });
 }
 
 /*******************************************

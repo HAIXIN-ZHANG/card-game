@@ -38,7 +38,6 @@ setGame();
 /*******************************************
 /     game process
 /******************************************/
-
 function setGame() {
   // register any element in your game object
   game.levelDisplay = document.querySelector('.game-stats__level--value');
@@ -46,6 +45,7 @@ function setGame() {
   game.startButton = document.querySelector('.game-stats__button');
   game.timerDisplay = document.querySelector('.game-timer__bar');
   game.gameBoard = document.querySelector('.game-board');
+
   bindStartButton();
 }
 
@@ -58,88 +58,14 @@ function startGame() {
   game.checkMatching = false;
   game.gameOver = false;
   game.preSelect = null;
-  game.scoreDisplay.innerHTML = game.score;
-  game.levelDisplay.innerHTML = game.level;
   generateCards();
   bindCardClick();
+  game.scoreDisplay.innerHTML = game.score;
+  game.levelDisplay.innerHTML = game.level;
   startTimer();
 }
 
-function generateCards() {
-  const gameBoard = game.gameBoard;
-  const gameSize = game.level * 2;
-  const totalCards = gameSize * gameSize;
-  game.totalCards = totalCards;
-  gameBoard.style['grid-template-columns'] = `repeat(${gameSize}, 1fr)`;
-  const cards = [];
-  for (let i = 0; i < totalCards / 2; i++) {
-    const tech = CARD_TECHS[i % CARD_TECHS.length];
-    const card = createCardElement(tech);
-    cards.push(card);
-    cards.unshift(card.cloneNode(true));
-  }
-  while (cards.length > 0) {
-    const index = Math.floor(Math.random() * cards.length);
-    const card = cards.splice(index, 1)[0];
-    gameBoard.appendChild(card);
-  }
-}
-
-function createCardElement(tech) {
-  const  node = document.createElement('div');
-  const cardFront = document.createElement('div');
-  const cardBack = document.createElement('div');
-
-  cardFront.classList.add('card__face', 'card__face--front');
-  cardBack.classList.add('card__face', 'card__face--back');
-  node.classList.add('card', tech);
-  node.dataset.tech = tech;
-
-  node.appendChild(cardFront);
-  node.appendChild(cardBack);
-  return node;
-}
-
 function handleCardFlip() {
-  if (game.checkMatching || game.gameOver) {
-    return;
-  }
-  const currentSelected = this;
-  if (currentSelected === game.preSelected) {
-    currentSelected.classList.remove('card--flipped');
-    game.preSelected = null;
-    return;
-  }else{
-    currentSelected.classList.add('card--flipped');
-  }
-  if (game.preSelected) {
-    console.log(currentSelected.dataset.tech, game.preSelected.dataset.tech);
-    checkCardMatching(currentSelected, game.preSelected);
-    return;
-  }
-  game.preSelected = currentSelected;
-}
-
-function checkCardMatching(card1, card2){
-  if (card1.dataset.tech === card2.dataset.tech) {
-    unBindCardClick(card1);
-    unBindCardClick(card2);
-    game.preSelected = null;
-    game.clearedCards += 2;
-    updateScore();
-    if (game.clearedCards === game.totalCards) {
-      stopTimer();
-      setTimeout(() => nextLevel(), 1500);
-    }
-  } else {
-    game.checkMatching = true;
-    setTimeout(() => {
-      card1.classList.remove('card--flipped');
-      card2.classList.remove('card--flipped');
-      game.preSelected = null;
-      game.checkMatching = false;
-    }, 1000);
-  }
 }
 
 function nextLevel() {
@@ -163,7 +89,42 @@ function handleGameOver() {
   game.startButton.innerHTML = 'Start game';
   clearInterval(game.timerInterval);
   game.gameOver = true;
-  alert(`congratulation, your score is ${game.score}`);
+  alert(`congratulation, your score is ${game.score}`)
+}
+
+function generateCards() {
+  const gameBoard = game.gameBoard;
+  const gameSize = game.level * 2;
+  const totalCards = gameSize * gameSize;
+  game.totalCards = totalCards;
+  gameBoard.style['grid-template-columns'] = `repeat(${gameSize}, 1fr)`;
+  const cards = [];
+  for (let i = 0; i < totalCards / 2; i++) {
+    const tech = CARD_TECHS[i % CARD_TECHS.length];
+    const card = createCardElement(tech);
+    cards.push(card);
+    cards.unshift(card.cloneNode(true));
+  }
+  while (cards.length > 0) {
+    const index = Math.floor(Math.random() * cards.length);
+    const card = cards.splice(index, 1)[0];
+    gameBoard.appendChild(card);
+  }
+
+}
+function createCardElement(tech) {
+  const  node = document.createElement('div');
+  const cardFront = document.createElement('div');
+  const cardBack = document.createElement('div');
+
+  cardFront.classList.add('card__face', 'card__face--front');
+  cardBack.classList.add('card__face', 'card__face--back');
+  node.classList.add('card', tech);
+  node.dataset.tech = tech;
+
+  node.appendChild(cardFront);
+  node.appendChild(cardBack);
+  return node;
 }
 
 function startTimer() {
@@ -187,11 +148,12 @@ function stopTimer(){
   clearInterval(game.timerInterval);
   game.timerInterval = null;
 }
-
+function checkCardMatching(card1, card2){
+  
+}
 /*******************************************
 /     UI update
 /******************************************/
-
 function updateScore() {
   const score = game.level * game.level * game.timer;
   game.score += score;
@@ -205,17 +167,14 @@ function updateTimerDisplay() {
 }
 
 function clearGameBoard() {
-  while (game.gameBoard.firstChild) {
-    game.gameBoard.firstChild.removeEventListener('click', handleCardFlip);
-    game.gameBoard.removeChild(game.gameBoard.firstChild);
-  }
+
 }
 
 /*******************************************
 /     bindings
 /******************************************/
 function bindStartButton() {
-  game.startButton.addEventListener('click', () => {
+  game.startButton.addeEventListener('click', () => {
     if (game.gameOver) {
       startGame();
     } else {

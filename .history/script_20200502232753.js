@@ -104,7 +104,9 @@ function handleCardFlip() {
   if (game.checkMatching || game.gameOver) {
     return;
   }
+  // understand why this === card element, you can also pass a card element param in
   const currentSelected = this;
+  // check if same card
   if (currentSelected === game.preSelected) {
     currentSelected.classList.remove('card--flipped');
     game.preSelected = null;
@@ -112,7 +114,9 @@ function handleCardFlip() {
   }else{
     currentSelected.classList.add('card--flipped');
   }
+  // check if preselected already
   if (game.preSelected) {
+    // check match
     console.log(currentSelected.dataset.tech, game.preSelected.dataset.tech);
     checkCardMatching(currentSelected, game.preSelected);
     return;
@@ -187,7 +191,7 @@ function stopTimer(){
   clearInterval(game.timerInterval);
   game.timerInterval = null;
 }
-
+zhe
 /*******************************************
 /     UI update
 /******************************************/
@@ -205,9 +209,10 @@ function updateTimerDisplay() {
 }
 
 function clearGameBoard() {
-  while (game.gameBoard.firstChild) {
-    game.gameBoard.firstChild.removeEventListener('click', handleCardFlip);
-    game.gameBoard.removeChild(game.gameBoard.firstChild);
+  const gameBoard = game.gameBoard;
+  while (gameBoard.firstChild) {
+    gameBoard.firstChild.removeEventListener('click', handleCardFlip);
+    gameBoard.removeChild(gameBoard.firstChild);
   }
 }
 
