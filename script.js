@@ -29,7 +29,6 @@ const game = {
   checkMatching: false,
   totalCards:0,
   clearedCards:0,
-
   // and much more
 };
 
@@ -58,10 +57,10 @@ function startGame() {
   game.checkMatching = false;
   game.gameOver = false;
   game.preSelect = null;
-  game.scoreDisplay.innerHTML = game.score;
-  game.levelDisplay.innerHTML = game.level;
   generateCards();
   bindCardClick();
+  game.scoreDisplay.innerHTML = game.score;
+  game.levelDisplay.innerHTML = game.level;
   startTimer();
 }
 
@@ -104,14 +103,16 @@ function handleCardFlip() {
   if (game.checkMatching || game.gameOver) {
     return;
   }
+  
   const currentSelected = this;
   if (currentSelected === game.preSelected) {
     currentSelected.classList.remove('card--flipped');
     game.preSelected = null;
     return;
-  }else{
-    currentSelected.classList.add('card--flipped');
   }
+
+  currentSelected.classList.add('card--flipped');
+
   if (game.preSelected) {
     console.log(currentSelected.dataset.tech, game.preSelected.dataset.tech);
     checkCardMatching(currentSelected, game.preSelected);
@@ -170,17 +171,15 @@ function startTimer() {
   if (game.timerInterval){
     stopTimer();
   }
-  else{
-    game.timer = 60;
+  game.timer = 60;
+  updateTimerDisplay();
+  game.timerInterval = setInterval(()=>{
+    game.timer--;
     updateTimerDisplay();
-    game.timerInterval = setInterval(()=>{
-      game.time--;
-      updateTimerDisplay();
-      if(game.time === 0) {
-        handleGameOver();
-      }
-    },1000);
-  }
+    if(game.timer === 0) {
+      handleGameOver();
+    }
+  },1000);
 }
 
 function stopTimer(){
